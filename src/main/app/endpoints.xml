@@ -14,7 +14,6 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
 http://www.mulesoft.org/schema/mule/sfdc http://www.mulesoft.org/schema/mule/sfdc/current/mule-sfdc.xsd
 http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/current/mule-smtp.xsd">
-    <data-mapper:config name="XML_To_Accountd" transformationGraphPath="xml_to_account.grf" doc:name="XML_To_Account"/>
 
 
 	<!-- 	In this file you should declare all your inbound endpoints and from here controll the access to your application -->
