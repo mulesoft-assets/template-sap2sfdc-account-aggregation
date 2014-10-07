@@ -53,7 +53,7 @@ There may be a few things that you need to know regarding SAP, in order for this
 
 ### As source of data
 
-SAP backend system is used as data source for migration.
+SAP backend system is used as data source for aggregation.
 Data is read by RFC call of BAPI function to SAP.
 SAP Connector needs to be properly customized as per chapter: [Properties to be configured](#propertiestobeconfigured)
 
