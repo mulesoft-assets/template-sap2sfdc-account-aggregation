@@ -60,6 +60,10 @@ Please check this Documentation Page:
 		</section>
 		<section id="application_configuration">
 		<![CDATA[
+**HTTP Connector configuration**
+
++ http.port=9090		
+		
 **SAP Connector configuration**
 
 + sap.jco.ashost=your.sap.address.com
