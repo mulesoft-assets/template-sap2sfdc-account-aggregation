@@ -78,6 +78,8 @@ Please check this Documentation Page:
 + sap.jco.client=800
 + sap.jco.lang=EN
 
++ sap.default.accountGroup=ZAG2
+
 **SAP Endpoint configuration**
 
 + sap.jco.connectioncount=2
@@ -102,6 +104,8 @@ Please check this Documentation Page:
 + mail.from=your.email@gmail.com
 + mail.to=your.email@gmail.com
 + mail.subject=Mail subject
++ mail.body=Aggregation Report
++ attachment.name=aggregation_report.csv
 
 ]]>
 		</section>

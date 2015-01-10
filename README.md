@@ -169,6 +169,8 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 + sap.jco.client=800
 + sap.jco.lang=EN
 
++ sap.default.accountGroup=ZAG2
+
 **SAP Endpoint configuration**
 
 + sap.jco.connectioncount=2
@@ -193,6 +195,8 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 + mail.from=your.email@gmail.com
 + mail.to=your.email@gmail.com
 + mail.subject=Mail subject
++ mail.body=Aggregation Report
++ attachment.name=aggregation_report.csv
 
 # API Calls <a name="apicalls"/>
 SalesForce imposes limits on the number of API Calls that can be made.
