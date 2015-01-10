@@ -1,12 +1,17 @@
 <?xml version="1.0"?>
 <configuration>
 	<placeholders>
-		<placeholder id="template_name">SFDC2SAP-Account-aggregation</placeholder>
+		<placeholder id="template_name">Salesforce and SAP Account Aggregation</placeholder>
 	</placeholders>
 	<sections>
 		<section id="use_case">
-			Use this template if would like to aggregate Customers from SAP with Salesforce Accounts in manner one time aggregation hitting the Http endpoint 
-			Inboud SAP endpoint retrieves all Accounts in SAP using standard BAPI  **BAPI_CUSTOMER_GETLIST** and transforms them to Salesforce Accounts
+I want to aggregate accounts from Salesforce and customers from SAP and compare them to see which ones can only be found in one of the two systems and which ones are in both.
+
+For practical purposes this Template will generate the result in the format of a CSV Report sent by e-mail.
+
+This Template should serve as a foundation for extracting data from two systems, aggregating data, comparing values of fields for the objects, and generating a report on the differences.
+
+As implemented, it gets accounts from Salesforce and customers from SAP using standard BAPI **BAPI_CUSTOMER_GETLIST**, compares them by the name, and generates a CSV file which shows Account in Salesforce, Customer in SAP, and Accounts in Salesforce and SAP. The report is then e-mailed to a configured group of e-mail addresses.
 		</section>
 		<section id="considerations">
 		<![CDATA[

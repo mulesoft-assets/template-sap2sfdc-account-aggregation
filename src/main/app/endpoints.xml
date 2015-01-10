@@ -16,7 +16,8 @@ http://www.mulesoft.org/schema/mule/sfdc http://www.mulesoft.org/schema/mule/sfd
 http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/current/mule-smtp.xsd">
 
 
-	<!-- 	In this file you should declare all your inbound endpoints and from here controll the access to your application -->
+	<!-- 	In this file you should declare all your inbound endpoints in order to control the access to your application -->
+
     <flow name="triggerFlow" doc:name="triggerFlow" doc:description="The main entry to the report generation, which will aggregate Salesforce and SAP accounts together.">
         <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="${http.port}" path="generatereport" doc:name="Start Report Generation" doc:description="Starts report generation."/>
         <flow-ref name="mainFlow" doc:name="trigger main flow"/>
@@ -29,21 +30,3 @@ http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smt
         <smtp:outbound-endpoint host="${smtp.host}" port="${smtp.port}" user="${smtp.user}" password="${smtp.password}" connector-ref="gmailConnector" to="${mail.to}" from="${mail.from}" subject="${mail.subject}" responseTimeout="10000" doc:name="Send mail"/>
     </flow>
 </mule>
-
-
-<!-- working all
-
-	<import>
-		<field name="MAXROWS"></field>
-	</import>
-  	<tables>
-	    <table name="IDRANGE">
-	      <row id="0">
-				<field name="SIGN">I</field>
-				<field name="OPTION">CP</field>
-				<field name="LOW">*</field>
-				<field name="HIGH"></field>
-	      </row>
-	    </table>		
-	</tables>
--->
