@@ -6,7 +6,7 @@
       xmlns="http://www.mulesoft.org/schema/mule/core"
       xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
       xmlns:spring="http://www.springframework.org/schema/beans"
-      version="EE-3.5.2"
+      version="EE-3.6.0"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
 http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/current/mule-smtp.xsd
@@ -19,7 +19,7 @@ http://www.mulesoft.org/schema/mule/sfdc http://www.mulesoft.org/schema/mule/sfd
 http://www.mulesoft.org/schema/mule/sap http://www.mulesoft.org/schema/mule/sap/current/mule-sap.xsd">
     <data-mapper:config name="XML_To_Account_1" transformationGraphPath="xml_to_account_1.grf" doc:name="XML_To_Account_1"/>
     <data-mapper:config name="Map_To_CSV" transformationGraphPath="map_to_csv.grf" doc:name="Map_To_CSV"/>
-    <flow name="mainFlow" doc:name="mainFlow" doc:description="This flow is the entry point to the business logic.
+    <flow name="mainFlow"  doc:description="This flow is the entry point to the business logic.
 
 This flow should control the direction of the application, and it should be called by the different endpoints that your Template exposes to trigger it.">
         <flow-ref name="gatherDataFlow" doc:name="call gatherDataFlow" doc:description="Call flow, which will obtain all accounts, which have to be merged together."/>
@@ -28,7 +28,7 @@ This flow should control the direction of the application, and it should be call
         <flow-ref name="outboundFlow" doc:name="call outboundFlow" doc:description="Call outbound flow to send aggregation result in human readable format to the endpoinds."/>
         <exception-strategy ref="defaultChoiceExceptionStrategy" doc:name="Reference Exception Strategy" doc:description="If problems occured."/>
     </flow>
-    <sub-flow name="gatherDataFlow" doc:name="gatherDataFlow" doc:description="Gathers data from Saleforce and SAP.">
+    <sub-flow name="gatherDataFlow"  doc:description="Gathers data from Saleforce and SAP.">
         <enricher source="#[payload]" target="#[flowVars['accountsFromOrgA']]" doc:name="Store result in FlowVar 'accountsFromOrgA'" doc:description="Query all accounts from the SalesForce. Only id, billingAddress and account name are fetched. Result is stored into the flowVar as 'accountsFromOrgA'.">
             <sfdc:query config-ref="Salesforce" query="dsql:SELECT BillingStreet,Id,Name FROM Account" doc:name="query all accounts from SalesForce"/>
         </enricher>
@@ -53,16 +53,17 @@ This flow should control the direction of the application, and it should be call
 	</tables>
 </BAPI_CUSTOMER_GETLIST>]]></sap:definition>
 
+
                 </sap:outbound-endpoint>
                 <data-mapper:transform config-ref="XML_To_Account_1" doc:name="convert SAP response to Salesforce Account"/>
                 <logger message="SAP: #[payload]" level="INFO" doc:name="Logger"/>
             </processor-chain>
         </enricher>
     </sub-flow>
-    <sub-flow name="aggregationFlow" doc:name="aggregationFlow" doc:description="Runs aggregation for accounts from Salesforce and converted accounts from SAP.">
+    <sub-flow name="aggregationFlow"  doc:description="Runs aggregation for accounts from Salesforce and converted accounts from SAP.">
         <custom-transformer class="org.mule.templates.transformers.SFDCAccountMerge" doc:name="Custom component to build merged accounts list"/>
     </sub-flow>
-    <sub-flow name="formatOutputFlow" doc:name="formatOutputFlow" doc:description="Aggregation output is sorted by the custom component(see org.mule.templates.transformers.SortAccountList) and mapped to CSV format.">
+    <sub-flow name="formatOutputFlow"  doc:description="Aggregation output is sorted by the custom component(see org.mule.templates.transformers.SortAccountList) and mapped to CSV format.">
         <custom-transformer class="org.mule.templates.transformers.SortAccountList" doc:name="Custom component to sort users list"/>
         <data-mapper:transform config-ref="Map_To_CSV" doc:name="Map To CSV"/>
         <object-to-string-transformer doc:name="CSV Output Object to String"/>

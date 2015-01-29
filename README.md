@@ -171,13 +171,6 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 
 + sap.default.accountGroup=ZAG2
 
-**SAP Endpoint configuration**
-
-+ sap.jco.connectioncount=2
-+ sap.jco.gwhost=your.sap.addres.com
-+ sap.jco.gwservice=sapgw14
-+ sap.jco.idoc.programid=PROGRAM_ID
-
 **SalesForce Connector configuration**
 
 + sfdc.username=bob.dylan@sfdc
