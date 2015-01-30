@@ -78,8 +78,6 @@ Please check this Documentation Page:
 + sap.jco.client=800
 + sap.jco.lang=EN
 
-+ sap.default.accountGroup=ZAG2
-
 **SalesForce Connector configuration**
 
 + sfdc.username=bob.dylan@sfdc
