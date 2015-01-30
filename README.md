@@ -97,7 +97,7 @@ You will need to create a new custom field in your **Product** entity in SFDC wi
 
 For instructions on how to create a custom field in SFDC plase check this link:
 
-+ [Create Custom Fields](http://www.salesforce.com/smallbusinesscenter/faq/customize.jsp#customfield)
++ [Create Custom Fields](https://help.salesforce.com/HTViewHelpDoc?id=adding_fields.htm)
 
 
 
@@ -168,8 +168,6 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 + sap.jco.sysnr=14
 + sap.jco.client=800
 + sap.jco.lang=EN
-
-+ sap.default.accountGroup=ZAG2
 
 **SalesForce Connector configuration**
 
