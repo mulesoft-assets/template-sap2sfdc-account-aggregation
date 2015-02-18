@@ -26,7 +26,7 @@ http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smt
 
     </flow>
     <flow name="outboundFlow" >
-        <remove-attachment attachmentName="${attachment.name}"   doc:name="Attach report to Email"/>
+        <set-attachment attachmentName="${attachment.name}"   doc:name="Attach report to Email" contentType="text/plain" value="#[payload]"/>
         <set-payload value="${mail.body}" doc:name="Set Payload"/>
         <smtp:outbound-endpoint host="${smtp.host}" port="${smtp.port}" user="${smtp.user}" password="${smtp.password}" connector-ref="gmailConnector" to="${mail.to}" from="${mail.from}" subject="${mail.subject}" responseTimeout="10000" doc:name="Send mail"/>
         <remove-attachment attachmentName="${attachment.name}" doc:name="Remove attachment"/>

@@ -23,17 +23,16 @@ http://www.mulesoft.org/schema/mule/sap http://www.mulesoft.org/schema/mule/sap/
 
 This flow should control the direction of the application, and it should be called by the different endpoints that your Template exposes to trigger it.">
         <flow-ref name="gatherDataFlow" doc:name="call gatherDataFlow" doc:description="Call flow, which will obtain all accounts, which have to be merged together."/>
-        <flow-ref name="aggregationFlow" doc:name="call aggregationFlow" doc:description="Aggregation is separated in individual flow, which contains all merging/aggregation logic."/>
+
         <flow-ref name="formatOutputFlow" doc:name="call formatOutputFlow" doc:description="Call output formating flow to provide human readeble output of an aggregation."/>
         <flow-ref name="outboundFlow" doc:name="call outboundFlow" doc:description="Call outbound flow to send aggregation result in human readable format to the endpoinds."/>
         <exception-strategy ref="defaultChoiceExceptionStrategy" doc:name="Reference Exception Strategy" doc:description="If problems occured."/>
     </flow>
     <sub-flow name="gatherDataFlow"  doc:description="Gathers data from Saleforce and SAP.">
-        <enricher source="#[payload]" target="#[flowVars['accountsFromOrgA']]" doc:name="Store result in FlowVar 'accountsFromOrgA'" doc:description="Query all accounts from the SalesForce. Only id, billingAddress and account name are fetched. Result is stored into the flowVar as 'accountsFromOrgA'.">
+        <scatter-gather doc:name="Scatter-Gather">
+            <custom-aggregation-strategy class="org.mule.templates.transformers.AccountMergeAggregationStrategy"/>
             <sfdc:query config-ref="Salesforce" query="dsql:SELECT BillingStreet,Id,Name FROM Account" doc:name="query all accounts from SalesForce"/>
-        </enricher>
-        <enricher source="#[payload]" target="#[flowVars['accountsFromOrgB']]" doc:name="Store result in FlowVar 'accountsFromOrgB'" doc:description="Query all customers from the SAP. The query result is prepared for merging by conversion to the Saleforce's Account type. For conversion, the DataMapper is used. Result is stored into the flowVar as 'accountsFromOrgB'.">
-            <processor-chain doc:name="Processor Chain">
+            <processor-chain>
                 <sap:outbound-endpoint exchange-pattern="request-response" connector-ref="SAP" type="function" functionName="BAPI_CUSTOMER_GETLIST" xmlVersion="2" outputXml="true" evaluateFunctionResponse="true" responseTimeout="10000" doc:name="query customers from SAP">
                     <sap:definition><![CDATA[<BAPI_CUSTOMER_GETLIST type="function">
 	<import>
@@ -52,17 +51,14 @@ This flow should control the direction of the application, and it should be call
 	</IDRANGE>
 	</tables>
 </BAPI_CUSTOMER_GETLIST>]]></sap:definition>
-
-
                 </sap:outbound-endpoint>
                 <data-mapper:transform config-ref="XML_To_Account_1" doc:name="convert SAP response to Salesforce Account"/>
                 <logger message="SAP: #[payload]" level="INFO" doc:name="Logger"/>
             </processor-chain>
-        </enricher>
+        </scatter-gather>
+
     </sub-flow>
-    <sub-flow name="aggregationFlow"  doc:description="Runs aggregation for accounts from Salesforce and converted accounts from SAP.">
-        <custom-transformer class="org.mule.templates.transformers.SFDCAccountMerge" doc:name="Custom component to build merged accounts list"/>
-    </sub-flow>
+
     <sub-flow name="formatOutputFlow"  doc:description="Aggregation output is sorted by the custom component(see org.mule.templates.transformers.SortAccountList) and mapped to CSV format.">
         <custom-transformer class="org.mule.templates.transformers.SortAccountList" doc:name="Custom component to sort users list"/>
         <data-mapper:transform config-ref="Map_To_CSV" doc:name="Map To CSV"/>

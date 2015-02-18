@@ -6,29 +6,23 @@
 
 package org.mule.templates.transformers;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mule.DefaultMuleMessage;
 import org.mule.api.MuleContext;
-import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
-import org.mule.templates.transformers.SFDCAccountMerge;
 
-@SuppressWarnings("unchecked")
 @RunWith(MockitoJUnitRunner.class)
-public class SFDCAccountsMergeTest {
-	private static final String QUERY_COMPANY_A = "accountsFromOrgA";
-	private static final String QUERY_COMPANY_B = "accountsFromOrgB";
-
+public class AccountsMergeTest {
+	
 	@Mock
 	private MuleContext muleContext;
 
@@ -37,20 +31,15 @@ public class SFDCAccountsMergeTest {
 		List<Map<String, String>> accountsA = createaccountLists("A", 0, 1);
 		List<Map<String, String>> accountsB = createaccountLists("B", 1, 2);
 
-		MuleMessage message = new DefaultMuleMessage(null, muleContext);
-		message.setInvocationProperty(QUERY_COMPANY_A, accountsA.iterator());
-		message.setInvocationProperty(QUERY_COMPANY_B, accountsB.iterator());
+		AccountMerger oppMerge = new AccountMerger();
+		List<Map<String, String>> mergedList = oppMerge.mergeList(accountsA, accountsB);
 
-		SFDCAccountMerge transformer = new SFDCAccountMerge();
-		List<Map<String, String>> mergedList = (List<Map<String, String>>) transformer.transform(message, "UTF-8");
-
-		System.out.println(mergedList);
-		Assert.assertEquals("The merged list obtained is not as expected", createExpectedList(), mergedList);
+		assertEquals("The merged list obtained is not as expected", createExpectedList(), mergedList);
 
 	}
 	
 
-	private List<Map<String, String>> createExpectedList() {
+	static List<Map<String, String>> createExpectedList() {
 		Map<String, String> account0 = new HashMap<String, String>();
 		account0.put("IDInA", "0");
 		account0.put("IDInB", "");
@@ -81,7 +70,7 @@ public class SFDCAccountsMergeTest {
 
 	}
 
-	private List<Map<String, String>> createaccountLists(String orgId, int start, int end) {
+	static List<Map<String, String>> createaccountLists(String orgId, int start, int end) {
 		List<Map<String, String>> accountList = new ArrayList<Map<String, String>>();
 		for (int i = start; i <= end; i++) {
 			accountList.add(createaccount(orgId, i));
@@ -89,7 +78,7 @@ public class SFDCAccountsMergeTest {
 		return accountList;
 	}
 
-	private Map<String, String> createaccount(String orgId, int sequence) {
+	static Map<String, String> createaccount(String orgId, int sequence) {
 		Map<String, String> account = new HashMap<String, String>();
 
 		account.put("Id", new Integer(sequence).toString());

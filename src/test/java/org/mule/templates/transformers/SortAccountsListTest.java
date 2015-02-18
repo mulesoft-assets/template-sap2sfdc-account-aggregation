@@ -6,12 +6,12 @@
 
 package org.mule.templates.transformers;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import junit.framework.Assert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,24 +21,24 @@ import org.mule.DefaultMuleMessage;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
-import org.mule.templates.transformers.SortAccountList;
 
 @SuppressWarnings("unchecked")
 @RunWith(MockitoJUnitRunner.class)
 public class SortAccountsListTest {
+	
 	@Mock
 	private MuleContext muleContext;
 
 	@Test
 	public void testSort() throws TransformerException {
-
-		MuleMessage message = new DefaultMuleMessage(createOriginalList(), muleContext);
+		List<Map<String, String>> originalList = createOriginalList();
+		MuleMessage message = new DefaultMuleMessage(originalList.iterator(), muleContext);
 
 		SortAccountList transformer = new SortAccountList();
-		List<Map<String, String>> sortedList = (List<Map<String, String>>) transformer.transform(message, "UTF-8");
+		List<Map<String, String>> sortedList = (List<Map<String, String>>) transformer
+				.transform(message, "UTF-8");
 
-		System.out.println(sortedList);
-		Assert.assertEquals("The merged list obtained is not as expected", createExpectedList(), sortedList);
+		assertEquals("The merged list obtained is not as expected", createExpectedList(), sortedList);
 
 	}
 

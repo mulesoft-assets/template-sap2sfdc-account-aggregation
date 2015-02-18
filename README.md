@@ -158,36 +158,38 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 ### Application configuration
 **HTTP Connector configuration**
 
-+ http.port=9090		
++ http.port `9090`		
 		
 **SAP Connector configuration**
 
-+ sap.jco.ashost=your.sap.address.com
-+ sap.jco.user=SAP_USER
-+ sap.jco.passwd=SAP_PASS
-+ sap.jco.sysnr=14
-+ sap.jco.client=800
-+ sap.jco.lang=EN
++ sap.jco.ashost `your.sap.address.com`
++ sap.jco.user `SAP_USER`
++ sap.jco.passwd `SAP_PASS`
++ sap.jco.sysnr `14`
++ sap.jco.client `800`
++ sap.jco.lang `EN`
 
 **SalesForce Connector configuration**
 
-+ sfdc.username=bob.dylan@sfdc
-+ sfdc.password=DylanPassword123
-+ sfdc.securityToken=avsfwCUl7apQs56Xq2AKi3X
-+ sfdc.url=https://test.salesforce.com/services/Soap/u/28.0
++ sfdc.username `bob.dylan@sfdc`
++ sfdc.password `DylanPassword123`
++ sfdc.securityToken `avsfwCUl7apQs56Xq2AKi3X`
++ sfdc.url `https://test.salesforce.com/services/Soap/u/28.0`
 
-# SMPT Services configuration
-+ smtp.host=smtp.gmail.com
-+ smtp.port=587
-+ smtp.user=gmailuser
-+ smtp.password=gmailpassword
+**SMPT Services configuration**
 
-# Mail details
-+ mail.from=your.email@gmail.com
-+ mail.to=your.email@gmail.com
-+ mail.subject=Mail subject
-+ mail.body=Aggregation Report
-+ attachment.name=aggregation_report.csv
++ smtp.host `smtp.gmail.com`
++ smtp.port `587`
++ smtp.user `gmailuser`
++ smtp.password `gmailpassword`
+
+**Mail details**
+
++ mail.from `your.email@gmail.com`
++ mail.to `your.email@gmail.com`
++ mail.subject `Mail subject`
++ mail.body `Aggregation Report`
++ attachment.name `aggregation_report.csv`
 
 # API Calls <a name="apicalls"/>
 SalesForce imposes limits on the number of API Calls that can be made.

@@ -8,15 +8,8 @@ package org.mule.templates.transformers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.mule.api.MuleMessage;
-import org.mule.api.transformer.TransformerException;
-import org.mule.transformer.AbstractMessageTransformer;
-
-import com.google.common.collect.Lists;
 
 /**
  * This transformer will take to list as input and create a third one that will be the merge of the previous two. The identity of an element of the list is
@@ -24,36 +17,7 @@ import com.google.common.collect.Lists;
  * 
  * @author cesar.garcia
  */
-public class SFDCAccountMerge extends AbstractMessageTransformer {
-
-	private static final String QUERY_COMPANY_A = "accountsFromOrgA";
-	private static final String QUERY_COMPANY_B = "accountsFromOrgB";
-
-	@Override
-	public Object transformMessage(MuleMessage message, String outputEncoding) throws TransformerException {
-
-		List<Map<String, String>> mergedaccountsList = mergeList(getAccountList(message, QUERY_COMPANY_A), getAccountList(message, QUERY_COMPANY_B));
-
-		return mergedaccountsList;
-	}
-
-	/**
-	 * The method obtains a list of map by its invocation property name.
-	 * @param message the mule message with a list as (flowVars)variable.
-	 * @param propertyName the invocation property name
-	 * @return extracted list
-	 */
-	@SuppressWarnings("unchecked")
-	private List<Map<String, String>> getAccountList(MuleMessage message, String propertyName) {
-		Object invocationProperty = message.getInvocationProperty(propertyName);
-		if(invocationProperty instanceof ArrayList) {
-			return (ArrayList<Map<String, String>>)invocationProperty;
-		}
-		else { 
-			Iterator<Map<String, String>> iterator = (Iterator<Map<String, String>>)invocationProperty;
-			return Lists.newArrayList(iterator);
-		}
-	}
+public class AccountMerger {	
 
 	/**
 	 * The method will merge the accounts from the two lists creating a new one.
@@ -64,7 +28,7 @@ public class SFDCAccountMerge extends AbstractMessageTransformer {
 	 *            accounts from organization B
 	 * @return a list with the merged content of the to input lists
 	 */
-	private List<Map<String, String>> mergeList(List<Map<String, String>> accountsFromOrgA, List<Map<String, String>> accountsFromOrgB) {
+	List<Map<String, String>> mergeList(List<Map<String, String>> accountsFromOrgA, List<Map<String, String>> accountsFromOrgB) {
 		List<Map<String, String>> mergedAccountsList = new ArrayList<Map<String, String>>();
 
 		// Put all accounts from A in the merged mergedAccountsList
