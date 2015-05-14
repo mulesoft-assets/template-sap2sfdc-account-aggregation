@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * This transformer will take to list as input and create a third one that will be the merge of the previous two. The identity of an element of the list is
  * defined by its name.
@@ -18,6 +21,8 @@ import java.util.Map;
  * @author cesar.garcia
  */
 public class AccountMerger {	
+	
+	private static final Logger log = LogManager.getLogger(AccountMerger.class);
 
 	/**
 	 * The method will merge the accounts from the two lists creating a new one.
@@ -77,7 +82,7 @@ public class AccountMerger {
 	 * @return found account or null
 	 */
 	private Map<String, String> findAccountInList(String accountName, List<Map<String, String>> orgList) {
-		System.err.println("Looking for: "+ accountName);
+		log.info("Looking for: "+ accountName);
 		for (Map<String, String> account : orgList) {
 			if (account.get("Name").equals(accountName)) {
 				return account;
