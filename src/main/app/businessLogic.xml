@@ -51,6 +51,7 @@ This flow should control the direction of the application, and it should be call
 	</IDRANGE>
 	</tables>
 </BAPI_CUSTOMER_GETLIST>]]></sap:definition>
+
                 </sap:outbound-endpoint>
                 <data-mapper:transform config-ref="XML_To_Account_1" doc:name="convert SAP response to Salesforce Account"/>
                 <logger message="SAP: #[payload]" level="INFO" doc:name="Logger"/>
