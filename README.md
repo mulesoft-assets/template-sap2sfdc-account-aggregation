@@ -32,16 +32,16 @@ For practical purposes this Template will generate the result in the format of a
 
 This Template should serve as a foundation for extracting data from two systems, aggregating data, comparing values of fields for the objects, and generating a report on the differences.
 
-As implemented, it gets accounts from Salesforce and customers from SAP using standard BAPI **BAPI_CUSTOMER_GETLIST**, compares them by the name, and generates a CSV file which shows Account in Salesforce, Customer in SAP, and Accounts in Salesforce and SAP. The report is then e-mailed to a configured group of e-mail addresses.
+As implemented, it gets accounts from Salesforce and customers from SAP using standard BAPI **BAPI\_CUSTOMER\_GETLIST**, compares them by the name, and generates a CSV file which shows Account in Salesforce, Customer in SAP, and Accounts in Salesforce and SAP. The report is then e-mailed to a configured group of e-mail addresses.
 
 # Considerations <a name="considerations"/>
 
 To make this Anypoint Template run, there are certain preconditions that must be considered.
-All of them deal with the preparations in both source (SAP) and destination (SFDC) systems, that must be made in order for all to run smoothly.
+All of them deal with the preparations in both systems (SAP and SFDC), that must be made in order for all to run smoothly.
 **Failling to do so could lead to unexpected behavior of the template.**
 
 Before continue with the use of this Anypoint Template, you may want to check out this [Documentation Page](http://www.mulesoft.org/documentation/display/current/SAP+Connector#SAPConnector-EnablingYourStudioProjectforSAP), that will teach you how to work 
-with SAP and Anypoint Studio-
+with SAP and Anypoint Studio.
 
 ## Disclaimer
 
@@ -146,7 +146,7 @@ Please check this Documentation Page:
 + [Enabling Your Studio Project for SAP](http://www.mulesoft.org/documentation/display/current/SAP+Connector#SAPConnector-EnablingYourStudioProjectforSAP)
 
 ### Running on Mule ESB stand alone <a name="runonmuleesbstandalone"/>
-Complete all properties in one of the property files, for example in [mule.prod.properties] (../master/src/main/resources/mule.prod.properties) and run your app with the corresponding environment variable to use it. To follow the example, this will be `mule.env=prod`. 
+Complete all properties in one of the property files, for example in [mule.prod.properties](../master/src/main/resources/mule.prod.properties) and run your app with the corresponding environment variable to use it. To follow the example, this will be `mule.env=prod`. 
 
 
 ## Running on CloudHub <a name="runoncloudhub"/>
@@ -180,7 +180,7 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 + sfdc.securityToken `avsfwCUl7apQs56Xq2AKi3X`
 + sfdc.url `https://login.salesforce.com/services/Soap/u/32.0`
 
-**SMPT Services configuration**
+**SMTP Services configuration**
 
 + smtp.host `smtp.gmail.com`
 + smtp.port `587`
