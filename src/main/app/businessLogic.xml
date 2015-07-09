@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:sap="http://www.mulesoft.org/schema/mule/sap" xmlns:json="http://www.mulesoft.org/schema/mule/json"
-	xmlns:smtp="http://www.mulesoft.org/schema/mule/smtp"
-	xmlns:sfdc="http://www.mulesoft.org/schema/mule/sfdc" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
-      xmlns="http://www.mulesoft.org/schema/mule/core"
-      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-      xmlns:spring="http://www.springframework.org/schema/beans"
-      version="EE-3.6.2"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+<mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw"
+	xmlns:sap="http://www.mulesoft.org/schema/mule/sap" xmlns:json="http://www.mulesoft.org/schema/mule/json"
+	xmlns:sfdc="http://www.mulesoft.org/schema/mule/sfdc" xmlns:batch="http://www.mulesoft.org/schema/mule/batch"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.7.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
 http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/current/mule-smtp.xsd
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
-http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
 http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
 http://www.mulesoft.org/schema/mule/sfdc http://www.mulesoft.org/schema/mule/sfdc/current/mule-sfdc.xsd
-http://www.mulesoft.org/schema/mule/sap http://www.mulesoft.org/schema/mule/sap/current/mule-sap.xsd">
-    <data-mapper:config name="XML_To_Account_1" transformationGraphPath="xml_to_account_1.grf" doc:name="XML_To_Account_1"/>
-    <data-mapper:config name="Map_To_CSV" transformationGraphPath="map_to_csv.grf" doc:name="Map_To_CSV"/>
+http://www.mulesoft.org/schema/mule/sap http://www.mulesoft.org/schema/mule/sap/current/mule-sap.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
+
     <flow name="mainFlow"  doc:description="This flow is the entry point to the business logic.
 
 This flow should control the direction of the application, and it should be called by the different endpoints that your Template exposes to trigger it.">
@@ -28,7 +26,7 @@ This flow should control the direction of the application, and it should be call
         <flow-ref name="outboundFlow" doc:name="call outboundFlow" doc:description="Call outbound flow to send aggregation result in human readable format to the endpoinds."/>
         <exception-strategy ref="defaultChoiceExceptionStrategy" doc:name="Reference Exception Strategy" doc:description="If problems occured."/>
     </flow>
-    <sub-flow name="gatherDataFlow"  doc:description="Gathers data from Saleforce and SAP.">
+    <flow name="gatherDataFlow" processingStrategy="synchronous" doc:description="Gathers data from Saleforce and SAP.">
         <scatter-gather doc:name="Scatter-Gather">
             <custom-aggregation-strategy class="org.mule.templates.transformers.AccountMergeAggregationStrategy"/>
             <sfdc:query config-ref="Salesforce" query="dsql:SELECT BillingStreet,Id,Name FROM Account" doc:name="query all accounts from SalesForce"/>
@@ -53,17 +51,39 @@ This flow should control the direction of the application, and it should be call
 </BAPI_CUSTOMER_GETLIST>]]></sap:definition>
 
                 </sap:outbound-endpoint>
-                <data-mapper:transform config-ref="XML_To_Account_1" doc:name="convert SAP response to Salesforce Account"/>
+                <dw:transform-message doc:name="convert SAP response to Salesforce Account">
+                    <dw:set-payload><![CDATA[%dw 1.0
+%input payload application/xml
+%output application/java
+---
+payload.BAPI_CUSTOMER_GETLIST.tables.ADDRESSDATA.*row map
+{
+	Name: $.NAME,
+	Id: $.@id as :string when ($.@id != null) otherwise null,	
+	BillingStreet: $.STREET
+}]]></dw:set-payload>
+                </dw:transform-message>
                 <logger message="SAP: #[payload]" level="INFO" doc:name="Logger"/>
             </processor-chain>
         </scatter-gather>
-
-    </sub-flow>
-
-    <sub-flow name="formatOutputFlow"  doc:description="Aggregation output is sorted by the custom component(see org.mule.templates.transformers.SortAccountList) and mapped to CSV format.">
+    </flow>
+    <flow name="formatOutputFlow" processingStrategy="synchronous" doc:description="Aggregation output is sorted by the custom component(see org.mule.templates.transformers.SortAccountList) and mapped to CSV format.">
         <custom-transformer class="org.mule.templates.transformers.SortAccountList" doc:name="Custom component to sort users list"/>
-        <data-mapper:transform config-ref="Map_To_CSV" doc:name="Map To CSV"/>
+        <dw:transform-message doc:name="Map To CSV">
+            <dw:set-payload><![CDATA[%dw 1.0
+%input payload application/java
+%output application/csv header=true, quoteValues=true
+---
+payload map
+{
+	Name: $.Name when ($.Name != null) otherwise "",
+	"Id in org A": $.IDInA when ($.IDInA != null) otherwise "",
+	"Street in org A": $.StreetInA when ($.StreetInA != null) otherwise "",
+	"Id in org B": $.IDInB when ($.IDInB != null) otherwise "",
+	"Street in org B": $.StreetInB when ($.StreetInB != null) otherwise ""
+}]]></dw:set-payload>
+        </dw:transform-message>
         <object-to-string-transformer doc:name="CSV Output Object to String"/>
-    </sub-flow>
 
+    </flow>
 </mule>
