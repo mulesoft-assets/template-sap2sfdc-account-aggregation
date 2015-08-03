@@ -53,7 +53,6 @@ This flow should control the direction of the application, and it should be call
                 </sap:outbound-endpoint>
                 <dw:transform-message doc:name="convert SAP response to Salesforce Account">
                     <dw:set-payload><![CDATA[%dw 1.0
-%input payload application/xml
 %output application/java
 ---
 payload.BAPI_CUSTOMER_GETLIST.tables.ADDRESSDATA.*row map
@@ -76,11 +75,11 @@ payload.BAPI_CUSTOMER_GETLIST.tables.ADDRESSDATA.*row map
 ---
 payload map
 {
-	Name: $.Name when ($.Name != null) otherwise "",
-	"Id in org A": $.IDInA when ($.IDInA != null) otherwise "",
-	"Street in org A": $.StreetInA when ($.StreetInA != null) otherwise "",
-	"Id in org B": $.IDInB when ($.IDInB != null) otherwise "",
-	"Street in org B": $.StreetInB when ($.StreetInB != null) otherwise ""
+	Name: $.Name,
+	"Id in org A": $.IDInA,
+	"Street in org A": $.StreetInA,
+	"Id in org B": $.IDInB,
+	"Street in org B": $.StreetInB
 }]]></dw:set-payload>
         </dw:transform-message>
         <object-to-string-transformer doc:name="CSV Output Object to String"/>
