@@ -27,6 +27,7 @@ public class BusinessLogicIT extends AbstractTemplateTestCase {
 	@Rule
 	public DynamicPort port = new DynamicPort("http.port");
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testGatherDataFlow() throws Exception {
 		MuleEvent event = runFlow("gatherDataFlow");

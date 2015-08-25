@@ -35,7 +35,6 @@ public class AccountsMergeTest {
 		List<Map<String, String>> mergedList = oppMerge.mergeList(accountsA, accountsB);
 
 		assertEquals("The merged list obtained is not as expected", createExpectedList(), mergedList);
-
 	}
 	
 
@@ -67,7 +66,6 @@ public class AccountsMergeTest {
 		accountList.add(account2);
 
 		return accountList;
-
 	}
 
 	static List<Map<String, String>> createaccountLists(String orgId, int start, int end) {
