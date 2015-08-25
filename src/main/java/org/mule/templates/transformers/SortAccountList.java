@@ -69,7 +69,6 @@ public class SortAccountList extends AbstractMessageTransformer {
 	public Object transformMessage(MuleMessage message, String outputEncoding) throws TransformerException {
 
 		List<Map<String, String>> sortedAccountsList = Lists.newArrayList((Iterator<Map<String, String>>) message.getPayload());
-
 		Collections.sort(sortedAccountsList, recordComparator);
 
 		return sortedAccountsList;

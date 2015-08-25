@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class AccountMerger {	
 	
-	private static final Logger log = LogManager.getLogger(AccountMerger.class);
+	private static final Logger LOGGER = LogManager.getLogger(AccountMerger.class);
 
 	/**
 	 * The method will merge the accounts from the two lists creating a new one.
@@ -82,7 +82,7 @@ public class AccountMerger {
 	 * @return found account or null
 	 */
 	private Map<String, String> findAccountInList(String accountName, List<Map<String, String>> orgList) {
-		log.info("Looking for: "+ accountName);
+		LOGGER.info("Looking for: "+ accountName);
 		for (Map<String, String> account : orgList) {
 			if (account.get("Name").equals(accountName)) {
 				return account;

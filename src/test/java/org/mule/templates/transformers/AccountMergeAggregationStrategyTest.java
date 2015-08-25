@@ -30,8 +30,7 @@ public class AccountMergeAggregationStrategyTest extends AbstractTemplateTestCas
 	
 	@Mock
 	private MuleContext muleContext;
-  
-	
+  	
 	@Test
 	public void testAggregate() throws Exception {
 		List<Map<String, String>> sfdcList = AccountsMergeTest.createaccountLists("A", 0, 1);
@@ -54,7 +53,6 @@ public class AccountMergeAggregationStrategyTest extends AbstractTemplateTestCas
 		List<Map<String, String>> mergedList = Lists.newArrayList(iterator);
 
 		assertEquals("The merged list obtained is not as expected", AccountsMergeTest.createExpectedList(), mergedList);
-
 	}
 
 }
