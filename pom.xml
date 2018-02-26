@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	
+	
+	<parent>
+ 		<groupId>org.mule.templates</groupId>
+ 		<artifactId>templates-tooling-parent-pom</artifactId>
+ 		<version>2.1.0-SNAPSHOT</version>
+ 	</parent>
+	
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>template-sap2sfdc-account-aggregation</artifactId>
+    <packaging>mule-application</packaging>
+	<name>template-sap2sfdc-account-aggregation</name>
+
+    <properties>
+		<mule.email.version>1.0.0</mule.email.version>
+		<sfdc.connector.version>9.0.0</sfdc.connector.version>
+		<mule.sap.connector.version>4.0.0</mule.sap.connector.version>
+		<sapjco3.version>3.0.15</sapjco3.version>
+		<sapidoc3.version>3.0.12</sapidoc3.version>
+		<libsapjco3.version>3.0.15</libsapjco3.version>
+	</properties>
+
+	<build>
+        <plugins>
+            <plugin>
+                <groupId>org.mule.tools.maven</groupId>
+                <artifactId>mule-maven-plugin</artifactId>
+                <version>${mule.maven.plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <sharedLibraries>
+                        <sharedLibrary>
+                            <groupId>com.sap.conn.jco</groupId>
+                            <artifactId>com.sap.conn.jco.sapjco3</artifactId>
+                        </sharedLibrary>
+                        <sharedLibrary>
+                            <groupId>com.sap.conn.idoc</groupId>
+                            <artifactId>com.sap.conn.idoc.sapidoc3</artifactId>
+                        </sharedLibrary>
+                        <sharedLibrary>
+                            <groupId>com.sap.conn.jco</groupId>
+                            <artifactId>com.sap.conn.jco.libsapjco3</artifactId>
+                        </sharedLibrary>
+                    </sharedLibraries>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.mule.connectors</groupId>
+			<artifactId>mule-http-connector</artifactId>
+			<version>${mule.connectors.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+    	<dependency>
+            <groupId>org.mule.connectors</groupId>
+            <artifactId>mule-sfdc-connector</artifactId>
+            <version>${sfdc.connector.version}</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.connectors</groupId>
+            <artifactId>mule-email-connector</artifactId>
+            <version>${mule.email.version}</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+         <dependency>
+            <groupId>org.mule.connectors</groupId>
+            <artifactId>mule-sap-connector</artifactId>
+            <version>${mule.sap.connector.version}</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.sap.conn.jco</groupId>
+            <artifactId>com.sap.conn.jco.sapjco3</artifactId>
+            <version>${sapjco3.version}</version>
+        </dependency>
+		<dependency>
+            <groupId>com.sap.conn.idoc</groupId>
+            <artifactId>com.sap.conn.idoc.sapidoc3</artifactId>
+            <version>${sapidoc3.version}</version>
+        </dependency>
+        
+        <!-- Mac OSX 64 bit Dependency -->
+<!--         <dependency>
+            <groupId>com.sap.conn.jco</groupId>
+            <artifactId>com.sap.conn.jco.libsapjco3</artifactId>
+            <version>${libsapjco3.version}</version>
+            <classifier>darwinintel64</classifier>
+            <type>jnilib</type>
+        </dependency>
+ --> 
+        <!-- Linux 64 bit Dependency -->
+<!-- 
+        <dependency>
+            <groupId>com.sap.conn.jco</groupId>
+            <artifactId>com.sap.conn.jco.libsapjco3</artifactId>
+            <version>${libsapjco3.version}</version>
+            <classifier>linuxx86_64</classifier>
+            <type>so</type>
+        </dependency>
+ -->        
+        <!-- Windows 64 bit Dependencies -->
+
+        <dependency>
+            <groupId>com.sap.conn.jco</groupId>
+            <artifactId>com.sap.conn.jco.libsapjco3</artifactId>
+            <version>${libsapjco3.version}</version>
+            <classifier>NTAMD64</classifier>
+            <type>dll</type>
+        </dependency>
+<!--         
+        <dependency>
+            <groupId>com.sap.conn.jco</groupId>
+            <artifactId>com.sap.conn.jco.libsapjco3</artifactId>
+            <version>3.0.15</version>
+            <classifier>NTAMD64</classifier>
+            <type>pdb</type>
+        </dependency>
+ -->        
+    </dependencies>
+
+	<repositories>
+        <repository>
+            <id>anypoint-exchange</id>
+            <name>Anypoint Exchange</name>
+            <url>https://maven.anypoint.mulesoft.com/api/v1/maven</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>mule-ee-thirdparty</id>
+				<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<name>Local repository for thirdparty</name>
+			<url>https://repository-master.mulesoft.org/nexus/content/repositories/thirdparty/</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>mulesoft-releases</id>
+            <name>MuleSoft Releases Repository</name>
+            <url>https://repository.mulesoft.org/releases/</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>mulesoft-snapshots</id>
+            <name>MuleSoft Snapshots Repository</name>
+            <url>https://repository.mulesoft.org/snapshots/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>mulesoft-releases</id>
+            <name>mulesoft release repository</name>
+            <layout>default</layout>
+            <url>https://repository.mulesoft.org/releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>mulesoft-snapshots</id>
+            <name>mulesoft snapshots repository</name>
+            <layout>default</layout>
+            <url>https://repository.mulesoft.org/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+</project>
