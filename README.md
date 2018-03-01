@@ -43,6 +43,11 @@ All of them deal with the preparations in both systems (SAP and SFDC), that must
 Before continue with the use of this Anypoint Template, you may want to check out this [Documentation Page](http://www.mulesoft.org/documentation/display/current/SAP+Connector#SAPConnector-EnablingYourStudioProjectforSAP), that will teach you how to work 
 with SAP and Anypoint Studio.
 
+## Disclaimer
+
+This Anypoint template uses a few private Maven dependencies from Mulesoft in order to work. If you intend to run this template with Maven support,.you need to add three dependencies in the pom.xml file that begin with the following group id: 
+	**com.sap.conn.jco** or **com.sap.conn.idoc**
+
 
 ## SAP Considerations <a name="sapconsiderations"/>
 

@@ -12,11 +12,8 @@
     <packaging>mule-application</packaging>
 	<name>template-sap2sfdc-account-aggregation</name>
 
-        <properties>
+    <properties>
 		<mule.sap.connector.version>4.0.0</mule.sap.connector.version>
-		<sapjco3.version>3.0.15</sapjco3.version>
-		<sapidoc3.version>3.0.12</sapidoc3.version>
-		<libsapjco3.version>3.0.15</libsapjco3.version>
 	</properties>
 
 	<build>
@@ -29,18 +26,7 @@
                 <configuration>
                 	<classifier>mule-application-template</classifier>
                     <sharedLibraries>
-                        <sharedLibrary>
-                            <groupId>com.sap.conn.jco</groupId>
-                            <artifactId>com.sap.conn.jco.sapjco3</artifactId>
-                        </sharedLibrary>
-                        <sharedLibrary>
-                            <groupId>com.sap.conn.idoc</groupId>
-                            <artifactId>com.sap.conn.idoc.sapidoc3</artifactId>
-                        </sharedLibrary>
-                        <sharedLibrary>
-                            <groupId>com.sap.conn.jco</groupId>
-                            <artifactId>com.sap.conn.jco.libsapjco3</artifactId>
-                        </sharedLibrary>
+                    	<!-- Please Add shared SAP libraries -->    	
                     </sharedLibraries>
                 </configuration>
             </plugin>
@@ -69,54 +55,8 @@
             <version>${mule.sap.connector.version}</version>
             <classifier>mule-plugin</classifier>
         </dependency>
-        <dependency>
-            <groupId>com.sap.conn.jco</groupId>
-            <artifactId>com.sap.conn.jco.sapjco3</artifactId>
-            <version>${sapjco3.version}</version>
-        </dependency>
-		<dependency>
-            <groupId>com.sap.conn.idoc</groupId>
-            <artifactId>com.sap.conn.idoc.sapidoc3</artifactId>
-            <version>${sapidoc3.version}</version>
-        </dependency>
-        
-        <!-- Mac OSX 64 bit Dependency -->
-<!--         <dependency>
-            <groupId>com.sap.conn.jco</groupId>
-            <artifactId>com.sap.conn.jco.libsapjco3</artifactId>
-            <version>${libsapjco3.version}</version>
-            <classifier>darwinintel64</classifier>
-            <type>jnilib</type>
-        </dependency>
- --> 
-        <!-- Linux 64 bit Dependency -->
-<!-- 
-        <dependency>
-            <groupId>com.sap.conn.jco</groupId>
-            <artifactId>com.sap.conn.jco.libsapjco3</artifactId>
-            <version>${libsapjco3.version}</version>
-            <classifier>linuxx86_64</classifier>
-            <type>so</type>
-        </dependency>
- -->        
-        <!-- Windows 64 bit Dependencies -->
-
-        <dependency>
-            <groupId>com.sap.conn.jco</groupId>
-            <artifactId>com.sap.conn.jco.libsapjco3</artifactId>
-            <version>${libsapjco3.version}</version>
-            <classifier>NTAMD64</classifier>
-            <type>dll</type>
-        </dependency>
-<!--         
-        <dependency>
-            <groupId>com.sap.conn.jco</groupId>
-            <artifactId>com.sap.conn.jco.libsapjco3</artifactId>
-            <version>${libsapjco3.version}</version>
-            <classifier>NTAMD64</classifier>
-            <type>pdb</type>
-        </dependency>
- -->        
+        <!-- Please Add dependencies for SAP libraries  --> 
+          
     </dependencies>
-    
+
 </project>
