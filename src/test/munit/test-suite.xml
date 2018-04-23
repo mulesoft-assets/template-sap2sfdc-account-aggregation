@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:sap="http://www.mulesoft.org/schema/mule/sap"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/sap http://www.mulesoft.org/schema/mule/sap/current/mule-sap.xsd">
+	<munit:config name="test-suite.xml" doc:name="MUnit configuration" />
+
+	<configuration-properties doc:name="Configuration properties" doc:id="c382dc50-b83c-41be-ad31-42ccb929d758" file="mule.${mule.env}.properties" />
+	<configuration-properties doc:name="Configuration properties" doc:id="59fef852-f885-4b1e-baac-96bce830be9f" file="mule-artifact.properties" />
+	<configuration-properties doc:name="Configuration properties" doc:id="a0f29785-69a4-48b7-8ef5-410c95ee7ff2" file="common.properties" />
+	<munit:before-test name="test-suiteBefore_Test" description="Before tests actions" doc:id="7f8facb1-95ae-4456-9448-faf3a3a89dc9">
+		<ee:transform doc:name="Set SAP XML request" doc:id="5805e619-b9bc-4bf2-afda-748104358033">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+---
+{
+  "BAPI_CUSTOMER_GETLIST": {
+    "import": {
+      "MAXROWS": "1"
+    },
+    "tables": {
+      "IDRANGE": {
+        "row": {
+          "SIGN": "I",
+          "OPTION": "CP",
+          "LOW": "*"
+        }
+      }
+    }
+  }
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<sap:execute-synchronous-remote-function-call doc:name="Get Customer from SAP" doc:id="f2cc9392-f6b6-4131-86f0-6683820282c3"
+			config-ref="SAP_Outbound" key="BAPI_CUSTOMER_GETLIST">
+		</sap:execute-synchronous-remote-function-call>
+		<ee:transform doc:name="Convert SAP response to Salesforce Account" doc:id="02f5401c-e5c4-4997-8400-62ba8fcd98c5">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="sapCustomers"><![CDATA[%dw 2.0
+output application/java
+---
+payload.BAPI_CUSTOMER_GETLIST.tables.ADDRESSDATA.*row map
+{
+	Name: $.NAME,
+	BillingStreet: $.STREET
+}]]></ee:set-variable>
+			</ee:variables>
+				</ee:transform>
+		<ee:transform doc:name="Prepare test data for Salesforce" doc:id="69e6252e-f567-49d8-8bd2-1f087138a35c" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="sfdcAccounts" ><![CDATA[%dw 2.0
+output application/java
+---
+[{
+	Name: "TestRecord" ++ randomInt(1000),
+	BillingStreet: "BillingStreet1"
+}]
+++ vars.sapCustomers]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<salesforce:create doc:id="4177eee0-4a5e-49fe-bd01-e3e9627bd5b0" doc:name="Create test Accounts in Salesforce" config-ref="Salesforce_Sfdc_config" type="Account">
+			<salesforce:records ><![CDATA[#[vars.sfdcAccounts]]]></salesforce:records>
+		</salesforce:create>
+		<ee:transform doc:name="Save Ids of created accounts" doc:id="248615f6-caaf-4760-8176-fb333dbb116d">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="sfdcIds"><![CDATA[%dw 2.0
+output application/java
+---
+payload map ($.Id)]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<munit-tools:mock-when doc:name="Mock email processor to avoid sending email" doc:id="17ab3357-3f08-4456-9f14-c41c281e06f1"
+			processor="email:send">
+			<munit-tools:then-return />
+		</munit-tools:mock-when>
+	</munit:before-test>
+	<munit:test name="test-suite-businessLogicFlowTest" description="Test" doc:id="4ffcda90-21bf-4cd4-9460-09cf6ca578e5">
+		<munit:execution>
+			<flow-ref doc:name="businessLogicFlow" doc:id="3e0601a1-1b47-4974-83b0-8d30726559dd" name="businessLogicFlow" />
+			<ee:transform doc:name="Filtering test records" doc:id="903370f0-c852-4d41-a25e-46f41bbe649b">
+				<ee:message>
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload filter ($.Name == vars.sfdcAccounts[0].Name or $.Name == vars.sapCustomers[0].Name)]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+				</ee:variables>
+			</ee:transform>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that doc:name="Assert number of records" doc:id="f202c84b-b80c-42bf-b2bb-17b889c1bc50" expression="#[sizeOf(payload)]" is="#[MunitTools::equalTo(2)]" message="Assert number of records" />
+			<munit-tools:assert-that doc:name="Assert that name in first record is correct" doc:id="df64f6a4-1444-43d1-9b31-069dccfb9c04"
+				is="#[MunitTools::equalTo(vars.sfdcAccounts[0].Name)]" expression="#[payload[0].Name]" message="Name in the first record is incorrect" />
+			<munit-tools:assert-that doc:name="Assert that name in second record is correct" doc:id="df64f6a4-1444-43d1-9b31-069dccfb9c04"
+				is="#[MunitTools::equalTo(vars.sfdcAccounts[1].Name)]" expression="#[payload[1].Name]" message="Name in the second record is incorrect" />
+		</munit:validation>
+	</munit:test>
+
+	<munit:after-test name="test-suiteAfter_Test" description="After tests actions" doc:id="5b85bb9e-67e6-47f7-8f71-53a39f147fc8">
+		<salesforce:delete doc:name="Delete test Accounts from Salesforce" doc:id="788956ca-8ada-49c2-a3f7-7eb367e735b4" config-ref="Salesforce_Sfdc_config">
+			<salesforce:delete-ids><![CDATA[#[vars.sfdcIds]]]></salesforce:delete-ids>
+		</salesforce:delete>
+	</munit:after-test>
+</mule>

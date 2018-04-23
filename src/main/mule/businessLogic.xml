@@ -64,7 +64,7 @@ payload.BAPI_CUSTOMER_GETLIST.tables.ADDRESSDATA.*row map
 		<ee:transform doc:name="Transform Collection to CSV" doc:id="7668acb0-da18-4df8-92a8-0bc58c5ad88b" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/csv separator=",", header=true, quoteValues=true
+output application/csv
 import mergeWith from dw::core::Objects
 var accountsA = payload["0"].payload map (account) -> {
 	"Name": account.Name,
