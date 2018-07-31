@@ -8,6 +8,7 @@
     </parent>
     <artifactId>template-sap2sfdc-account-aggregation</artifactId>
     <packaging>mule-application</packaging>
+    <version>2.1.0-SNAPSHOT</version>
     <name>template-sap2sfdc-account-aggregation</name>
     <build>
         <plugins>
