@@ -9,9 +9,7 @@ Aggregation templates can be easily extended to return a multitude of data in mo
 
 **Note:** Any references in the video to DataMapper have been updated in the template with DataWeave transformations.
 
-```
-![](https://www.youtube.com/embed/Zb2yGo0QlwI?wmode=transparent)
-```
+[![YouTube Video](http://img.youtube.com/vi/Zb2yGo0QlwI/0.jpg)](https://www.youtube.com/watch?v=Zb2yGo0QlwI)]
 
 # License Agreement
 
